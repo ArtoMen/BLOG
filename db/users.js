@@ -41,10 +41,7 @@ class user extends db {
             const res = await this.db.query(sql, values);
             if (res.rows.length) {
                 if (bcrypt.compareSync(data['password'], res.rows[0]['password'])) {
-
                     delete res.rows[0]['password'];
-                    delete res.rows[0]['findkey'];
-                    delete res.rows[0]['secretkey'];
                     return res.rows[0];
                 } else return 2;
             } else {

@@ -3,6 +3,8 @@ const db = require('../db/users');
 
 
 module.exports.login = async(req, res) => {
+    const jwt = require('jsonwebtoken');
+    const key = require('../config/config')
     if (!req.body.email || !req.body.password) {
         res.status(400).json({ success: true, register: false, error: true, errorCode: 200, message: 'Some fields are empty' });
         return;
@@ -22,7 +24,8 @@ module.exports.login = async(req, res) => {
     if (result === 0) res.status(500).json({ success: true, auth: false, error: true, errorCode: 500, message: 'Internal server error' });
     else if (result === 2) res.status(200).json({ success: true, auth: false, error: true, errorCode: 251, message: 'Wrong login or password' });
     else {
-        res.status(200).json({ success: true, auth: true, error: false, info: result });
+        const token = jwt.sign({ findKey: result['findkey'], secretKey: result['secretkey'] }, key.secretKey, { expiresIn: 60 * 60 * 24 * 30 });
+        res.status(200).json({ success: true, auth: true, error: false, token: 'Bearer ' + token });
     }
 }
 
