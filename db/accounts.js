@@ -8,7 +8,7 @@ class user extends db {
         let ok = false;
         while (!ok) {
             try {
-                if (!(await this.db.query(`select * from users where secretkey = ${secretKey}`)).rows.length) ok = true;
+                if (!(await this.db.query(`select * from users where secretkey = $1`, [secretKey])).rows.length) ok = true;
                 else secretKey = crypto.randomBytes(64).toString('hex');
             } catch (e) {
                 console.error(e.stack);
@@ -17,7 +17,7 @@ class user extends db {
         }
         while (ok) {
             try {
-                if (!(await this.db.query(`select * from users where findkey = ${findKey}`)).rows.length) ok = false;
+                if (!(await this.db.query(`select * from users where findkey = $1`, [findKey])).rows.length) ok = false;
                 else findKey = crypto.randomBytes(64).toString('hex');
             } catch (e) {
                 console.error(e.stack);
@@ -35,6 +35,7 @@ class user extends db {
                 return 2;
             }
         } catch (err) {
+            console.log()
             console.error(err.stack);
             return 0;
         }
@@ -42,11 +43,12 @@ class user extends db {
         sql = 'INSERT INTO users(name, email, password, secretKey, findKey) VALUES($1, $2, $3, $4, $5) RETURNING *';
         values = [data['name'], data['email'], bcrypt.hashSync(data['password'], salt), secretKey, findKey];
         try {
+            console.log('SQL: ', sql);
             const res = await this.db.query(sql, values)
-            console.log('create user', res.rows[0]);
-            return 1;
+            console.log('OK!');
+            return res.rows[0];
         } catch (err) {
-            console.error(err.stack);
+            console.error(err);
             return 0;
         }
     }

@@ -8,6 +8,8 @@ ERRORS RESPONSE:
 
 USERS: 
 
+/api/users/{method}
+
 * register:
 
 	method: POST
@@ -30,4 +32,24 @@ USERS:
 		* 254 - email is already in use
 		* 500 - internal server error 
 
+
+* login 
+	
+	method: POST
+
+	parameters:
+		* email
+		* password
+
+	response:
+		* status - request processed
+		* auth - authorization status
+		* error - true || false
+
+	errors:
+		* 200 - some fields are empty
+		* 251 - invalid email
+		* 252 - invalid password 
+		* 253 - email is already in use
+		* 500 - internal server error 
 
