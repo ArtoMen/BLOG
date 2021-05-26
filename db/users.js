@@ -3,9 +3,28 @@ const db = require('./db');
 class user extends db {
     async register(data) {
         const crypto = require("crypto");
-        const secretKey = crypto.randomBytes(64).toString('hex');
-        const findKey = crypto.randomBytes(64).toString('hex');
-        console.log(findKey);
+        let secretKey = crypto.randomBytes(64).toString('hex');
+        let findKey = crypto.randomBytes(64).toString('hex');
+        let ok = false;
+        while (!ok) {
+            try {
+                if (!(await this.db.query(`select * from users where secretkey = ${secretKey}`)).rows.length) ok = true;
+                else secretKey = crypto.randomBytes(64).toString('hex');
+            } catch (e) {
+                console.error(e.stack);
+                return 0;
+            }
+        }
+        while (ok) {
+            try {
+                if (!(await this.db.query(`select * from users where findkey = ${findKey}`)).rows.length) ok = false;
+                else findKey = crypto.randomBytes(64).toString('hex');
+            } catch (e) {
+                console.error(e.stack);
+                return 0;
+            }
+
+        }
         const bcrypt = require('bcryptjs');
         const salt = bcrypt.genSaltSync(10);
         let sql = 'SELECT email FROM users WHERE email = $1';
@@ -34,7 +53,6 @@ class user extends db {
 
     async login(data) {
         const bcrypt = require('bcryptjs');
-        const jwt = require('jsonwebtoken');
         let sql = 'SELECT * FROM users WHERE email = $1';
         let values = [data['email']];
         try {
@@ -49,6 +67,18 @@ class user extends db {
             }
         } catch (err) {
             console.error(err.stack);
+            return 0;
+        }
+    }
+
+    async findUserWithKey(key) {
+        try {
+            const res = await this.db.query('SELECT id, name, email, secretkey FROM users WHERE findkey = $1', [key]);
+            if (res.rows.length) {
+                return res.rows[0];
+            } else return 1;
+        } catch (e) {
+            console.error(e);
             return 0;
         }
     }

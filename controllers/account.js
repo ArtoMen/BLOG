@@ -1,4 +1,3 @@
-const { Pool, Client } = require('pg');
 const db = require('../db/users');
 
 

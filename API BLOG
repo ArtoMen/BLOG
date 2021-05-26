@@ -29,6 +29,5 @@ USERS:
 		* 253 - invalid password 
 		* 254 - email is already in use
 		* 500 - internal server error 
-		123
 
 
