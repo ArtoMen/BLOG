@@ -1,0 +1,33 @@
+API BLOG
+
+ERRORS RESPONSE:
+
+	* errorCode - Unique error code
+	* message - text error
+
+
+USERS: 
+
+* register:
+
+	method: POST
+	
+	parameters:
+		* name
+		* email
+		* password
+
+	response:
+		* status - request processed
+		* register - registration status
+		* error - true || false
+
+	errors:
+		* 200 - some fields are empty
+		* 251 - invalid email
+		* 252 - invalid name
+		* 253 - invalid password 
+		* 254 - email is already in use
+		* 500 - internal server error
+
+
