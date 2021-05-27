@@ -6,6 +6,7 @@ const controller = require('../controllers/account');
 router.post('/login', controller.login);
 router.post('/register', controller.register);
 router.post('/changePassword', passport.authenticate('jwt', { session: false }), controller.changePassword);
+router.get('/info', passport.authenticate('jwt', { session: false }), controller.info);
 router.get('/delete', passport.authenticate('jwt', { session: false }), controller.delete);
 
 module.exports = router;

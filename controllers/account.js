@@ -76,3 +76,8 @@ module.exports.delete = async(req, res) => {
     if (result) res.status(200).json({ success: true, status: true, error: false });
     else res.status(500).json({ success: true, status: false, error: true, errorCode: 500, message: 'Internal server error' });
 }
+
+module.exports.info = async(req, res) => {
+    delete req.user.id;
+    res.status(200).json({ success: true, status: true, error: false, info: req.user });
+}
