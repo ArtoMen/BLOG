@@ -23,6 +23,7 @@ USERS:
 		* success - request processed
 		* status - registration status
 		* error - true || false
+		* token - - JWT token
 
 	errors:
 		* 200 - some fields are empty
@@ -45,6 +46,7 @@ USERS:
 		* success - request processed
 		* status - authorization status
 		* error - true || false
+		* token - JWT token
 
 	errors:
 		* 200 - some fields are empty
@@ -90,6 +92,22 @@ USERS:
 	errors:
 		* 500 - internal server error 
 
+
+* info
+
+	method: GET
+
+	Requires a token!
+
+	Requires no parameters
+
+	response:
+		* success - request processed
+		* status - operation status
+		* error - true || false
+		* info - user info
+	
+	The method returns no errors
 
 
 

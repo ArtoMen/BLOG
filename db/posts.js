@@ -14,7 +14,6 @@ class Post extends db {
             return 0;
         }
     }
-
 }
 
 module.exports = new Post();
