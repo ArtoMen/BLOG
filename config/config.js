@@ -1,3 +1,4 @@
 module.exports = {
-    secretKey: 'B'
+    secretKey: 'B',
+    pathToUploads: 'uploads'
 }

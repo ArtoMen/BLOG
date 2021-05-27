@@ -1,6 +1,6 @@
 const db = require('./db');
 
-class user extends db {
+class User extends db {
     async register(data) {
         const crypto = require("crypto");
         let secretKey = crypto.randomBytes(64).toString('hex');
@@ -107,4 +107,4 @@ class user extends db {
 
 }
 
-module.exports = new user();
+module.exports = new User();
