@@ -9,7 +9,7 @@ const postRoutes = require('./routes/posts');
 
 
 // Other
-app.use(cookieParser());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());

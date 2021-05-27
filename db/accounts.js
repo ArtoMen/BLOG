@@ -40,12 +40,10 @@ class user extends db {
             return 0;
         }
         //create
-        sql = 'INSERT INTO users(name, email, password, secretKey, findKey) VALUES($1, $2, $3, $4, $5) RETURNING *';
+        sql = 'INSERT INTO users(name, email, password, secretKey, findKey, active) VALUES($1, $2, $3, $4, $5, true) RETURNING *';
         values = [data['name'], data['email'], bcrypt.hashSync(data['password'], salt), secretKey, findKey];
         try {
-            console.log('SQL: ', sql);
             const res = await this.db.query(sql, values)
-            console.log('OK!');
             return res.rows[0];
         } catch (err) {
             console.error(err);
@@ -84,6 +82,29 @@ class user extends db {
             return 0;
         }
     }
+
+    async changePassword(user) {
+        const bcrypt = require('bcryptjs');
+        const salt = bcrypt.genSaltSync(10);
+        try {
+            await this.db.query('UPDATE users SET password = $1 WHERE id = $2', [bcrypt.hashSync(user.newPassword, salt), user.id]);
+            return true;
+        } catch (e) {
+            console.log(e.stack);
+            return false;
+        }
+    }
+
+    async deletAccount(user) {
+        try {
+            await this.db.query('DELETE FROM users WHERE id = $1', [user.id]);
+            return true;
+        } catch (e) {
+            console.log(e.stack);
+            return false;
+        }
+    }
+
 }
 
 module.exports = new user();

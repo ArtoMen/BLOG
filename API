@@ -1,4 +1,4 @@
-API BLOG
+API
 
 ERRORS RESPONSE:
 
@@ -20,8 +20,8 @@ USERS:
 		* password
 
 	response:
-		* status - request processed
-		* register - registration status
+		* success - request processed
+		* status - registration status
 		* error - true || false
 
 	errors:
@@ -42,8 +42,8 @@ USERS:
 		* password
 
 	response:
-		* status - request processed
-		* auth - authorization status
+		* success - request processed
+		* status - authorization status
 		* error - true || false
 
 	errors:
@@ -52,4 +52,45 @@ USERS:
 		* 252 - invalid password 
 		* 253 - email is already in use
 		* 500 - internal server error 
+
+
+* changePassword
+
+	method: POST
+
+	Requires a token!
+
+	parameters:
+		* password
+
+	response:
+		* success - request processed
+		* status - operation status
+		* error - true || false
+	
+	errors:
+		* 200 - some fields are empty
+		* 251 - invalid password 
+		* 500 - internal server error 
+
+
+* deleteAccount - on development stage
+
+	method: GET
+
+	Requires a token!
+
+	Requires no parameters
+
+	response:
+		* success - request processed
+		* status - operation status
+		* error - true || false
+	
+	errors:
+		* 500 - internal server error 
+
+
+
+
 
