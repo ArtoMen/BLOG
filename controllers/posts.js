@@ -10,7 +10,7 @@ module.exports.create = async(req, res) => {
 }
 
 module.exports.upload = (req, res) => {
-    res.status(200).json({ success: true, status: true, error: false, fileName: req.file.path });
+    res.status(200).json({ success: true, status: true, error: false, filePath: req.file.path });
 }
 
 module.exports.like = async(req, res) => {
@@ -39,4 +39,26 @@ module.exports.like = async(req, res) => {
         if (result == 0) res.status(500).json({ success: true, status: false, error: true, errorCode: 500, message: 'Internal server error' });
         else res.status(200).json({ success: true, status: true, error: false });
     }
+}
+
+module.exports.update = async(req, res) => {
+    if (req.body.post_id < 0) {
+        res.status(400).json({ success: true, status: false, error: true, errorCode: 200, message: 'Some fields are empty' });
+        return;
+    }
+    let res = await db.ifPost(req.body.post_id);
+    if (res == 0) {
+        res.status(500).json({ success: true, status: false, error: true, errorCode: 500, message: 'Internal server error' });
+        return;
+    } else if (res == -1) {
+
+    }
+    const sets = {};
+    if (req.body.title) sets.title = req.body.title;
+    if (req.body.text) sets.text_post = req.body.text;
+    if (req.body.file) sets.image = req.body.file;
+    const result = await db.update(req.body.post_id, sets);
+    // if (result) res.status(200).json({ success: true, status: true, error: false });
+    // else res.status(200).json({ success: true, status: true, error: false, errorCode: 500, message: 'Internal server error' });
+    res.status(200);
 }
