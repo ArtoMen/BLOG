@@ -6,6 +6,7 @@ const controller = require('../controllers/posts');
 
 router.post('/create', passport.authenticate('jwt', { session: false }), file.single('image'), controller.create);
 router.post('/upload', passport.authenticate('jwt', { session: false }), file.single('image'), controller.upload);
+router.get('/like/:id', passport.authenticate('jwt', { session: false }), controller.like);
 // router.get('/like/:id', passport.authenticate('jwt', { session: false }), controller.like);
 
 // router.get('/like', controller.like);
