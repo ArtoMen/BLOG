@@ -42,22 +42,29 @@ module.exports.like = async(req, res) => {
 }
 
 module.exports.update = async(req, res) => {
-    if (req.body.post_id < 0) {
+    if (req.body.post_id < 0 && !(req.body.title || req.body.text || req.body.file)) {
         res.status(400).json({ success: true, status: false, error: true, errorCode: 200, message: 'Some fields are empty' });
         return;
     }
-    let res = await db.ifPost(req.body.post_id);
-    if (res == 0) {
+    let result = await db.ifPost(req.body.post_id);
+    if (result == 0) {
         res.status(500).json({ success: true, status: false, error: true, errorCode: 500, message: 'Internal server error' });
         return;
-    } else if (res == -1) {
-
+    } else if (result == -1) {
+        res.status(400).json({ success: true, status: false, error: true, errorCode: 251, message: 'Post not found' });
+    }
+    result = db.getPost(req.body.post_id)
+    if (result == 0) {
+        res.status(500).json({ success: true, status: false, error: true, errorCode: 500, message: 'Internal server error' });
+        return;
+    } else if (result.user_id == req.user.id) {
+        res.status(403).json({ success: true, status: false, error: true, errorCode: 400, message: 'Access is denied' });
     }
     const sets = {};
     if (req.body.title) sets.title = req.body.title;
     if (req.body.text) sets.text_post = req.body.text;
     if (req.body.file) sets.image = req.body.file;
-    const result = await db.update(req.body.post_id, sets);
+    result = await db.update(req.body.post_id, sets);
     // if (result) res.status(200).json({ success: true, status: true, error: false });
     // else res.status(200).json({ success: true, status: true, error: false, errorCode: 500, message: 'Internal server error' });
     res.status(200);
