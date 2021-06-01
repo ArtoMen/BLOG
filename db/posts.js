@@ -87,14 +87,22 @@ class Post extends db {
         }
     }
 
-    async post(id) {
+    async post(post_id, user_id) {
         const sql = 'SELECT posts.*, users.name, COUNT(likes.user_id) AS likes FROM ((posts INNER JOIN users ON posts.user_id = users.id) LEFT JOIN likes ON posts.id = likes.post_id) WHERE posts.id = $1 GROUP BY posts.id, users.name';
         try {
-            const post = {};
-            const post_info = (await this.db.query(sql, [id]));
-            delete info_post.rows[0].user_id;
-            post.post = post_info;
-            // const likes = await this.db.query('SELECT COUNT(id) FROM posts WHERE ', [id]);
+            const post_info = await this.db.query(sql, [post_id]);
+            delete post_info.rows[0].user_id;
+            const post = post_info.rows[0];
+            const comments = await this.db.query('SELECT comments.*, users.name FROM comments INNER JOIN users ON users.id = comments.user_id WHERE comments.post_id = $1', [post_id]);
+            post.comments = comments.rows;
+            if (!user_id) {
+                post.like = false;
+                return post;
+            }
+            const like = await this.db.query('SELECT * FROM likes WHERE user_id = $1 AND post_id = $2', [user_id, post_id]);
+            if (like.rows.length > 0) post.like = true;
+            else post.like = false;
+            return post;
         } catch (e) {
             console.log(e);
             return 0;
