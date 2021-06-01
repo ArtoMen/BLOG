@@ -69,3 +69,5 @@ module.exports.update = async(req, res) => {
     // else res.status(200).json({ success: true, status: true, error: false, errorCode: 500, message: 'Internal server error' });
     res.status(200);
 }
+
+// module.exports. = async(req, res) => {}
