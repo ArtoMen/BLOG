@@ -8,8 +8,6 @@ router.post('/create', passport.authenticate('jwt', { session: false }), file.si
 router.post('/upload', passport.authenticate('jwt', { session: false }), file.single('image'), controller.upload);
 router.get('/like/:id', passport.authenticate('jwt', { session: false }), controller.like);
 router.post('/update', passport.authenticate('jwt', { session: false }), controller.update);
-// router.get('/like/:id', passport.authenticate('jwt', { session: false }), controller.like);
-
-// router.get('/like', controller.like);
+router.get('/:id', controller.post);
 
 module.exports = router;

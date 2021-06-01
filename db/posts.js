@@ -86,6 +86,20 @@ class Post extends db {
             return 0;
         }
     }
+
+    async post(id) {
+        const sql = 'SELECT posts.*, users.name, COUNT(likes.user_id) AS likes FROM ((posts INNER JOIN users ON posts.user_id = users.id) LEFT JOIN likes ON posts.id = likes.post_id) WHERE posts.id = $1 GROUP BY posts.id, users.name';
+        try {
+            const post = {};
+            const post_info = (await this.db.query(sql, [id]));
+            delete info_post.rows[0].user_id;
+            post.post = post_info;
+            // const likes = await this.db.query('SELECT COUNT(id) FROM posts WHERE ', [id]);
+        } catch (e) {
+            console.log(e);
+            return 0;
+        }
+    }
 }
 
 module.exports = new Post();

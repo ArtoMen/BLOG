@@ -70,4 +70,6 @@ module.exports.update = async(req, res) => {
     res.status(200);
 }
 
-// module.exports. = async(req, res) => {}
+module.exports.post = async(req, res) => {
+    const result = db.post(req.params.id);
+}
