@@ -10,7 +10,7 @@ module.exports.create = async(req, res) => {
     }
     const result = await db.create(req.user, req.body.title, req.body.text, req.file.path);
     if (result) res.status(200).json({ success: true, status: true, error: false });
-    else res.status(200).json({ success: true, status: true, error: false, errorCode: 500, message: 'Internal server error' });
+    else res.status(500).json({ success: true, status: false, error: false, errorCode: 500, message: 'Internal server error' });
 }
 
 module.exports.upload = (req, res) => {
