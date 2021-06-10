@@ -1,6 +1,5 @@
 const db = require('../db/accounts');
 
-
 module.exports.login = async(req, res) => {
     const jwt = require('jsonwebtoken');
     const key = require('../config/config')
@@ -15,6 +14,7 @@ module.exports.login = async(req, res) => {
     if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w]).{6,}$/.test(req.body.password))) {
         res.status(415).json({ success: true, status: false, error: true, errorCode: 252, message: 'Invalid password' });
         return;
+
     }
     const result = await db.login({
         email: req.body.email,
